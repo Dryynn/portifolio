@@ -1,73 +1,143 @@
-# React + TypeScript + Vite
+# Portfólio - Adryan
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é meu portfólio pessoal, um projeto onde reúno meus projetos e habilidades como desenvolvedor front-end. Construído com React, TypeScript e Vite, o foco foi criar uma experiência visual moderna e fluida, com animações suaves que tornam a navegação mais agradável e imersiva.
 
-Currently, two official plugins are available:
+## Destaques
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Design Moderno**: Interface elegante com componentes customizados
+- **Animações Suaves**: Implementadas com GSAP e Framer Motion
+- **Responsivo**: Totalmente adaptado para diferentes tamanhos de tela
+- **Performance**: Otimizado com Vite para carregamento rápido
+- **Acessibilidade**: Componentes construídos com boas práticas de UX
+- **Modular**: Código bem organizado e fácil de manter
 
-## React Compiler
+## Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Front-end
+- **React 19** - Biblioteca UI moderna
+- **TypeScript** - Tipagem estática para maior segurança
+- **Vite** - Build tool rápido e eficiente
+- **Tailwind CSS** - Utilitários CSS para styling
+- **Framer Motion** - Animações declarativas
+- **GSAP** - Animações avançadas com ScrollTrigger
 
-## Expanding the ESLint configuration
+### Componentes & UI
+- **shadcn/ui** - Componentes acessíveis e customizáveis
+- **Lucide React** - Ícones modernos e consistentes
+- **Radix UI** - Primitivos UI sem estilos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Desenvolvimento
+- **ESLint** - Linter para manter código consistente
+- **PostCSS** - Processador CSS avançado
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Estrutura do Projeto
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/
+│   ├── sections/
+│   │   ├── Hero.tsx              # Seção inicial do portfólio
+│   │   ├── About.tsx             # Sobre mim
+│   │   ├── Projects.tsx          # Projetos destacados
+│   │   ├── Experience.tsx        # Experiência profissional
+│   │   ├── Education.tsx         # Formação educacional
+│   │   ├── Skills.tsx            # Habilidades técnicas
+│   │   └── Footer.tsx            # Rodapé
+│   └── ui/
+│       ├── NavBar.tsx            # Navegação principal
+│       ├── Card.tsx              # Componente de card
+│       ├── Button.tsx            # Componente de botão
+│       ├── GlareCard.tsx         # Card com efeito glare
+│       ├── SpotlightCard.tsx     # Card com spotlight
+│       ├── ScrollReveal.tsx      # Animação de scroll
+│       └── SmoothScroll.tsx      # Scroll suave
+├── lib/
+│   └── utils.ts                  # Utilidades
+├── App.tsx                       # Componente raiz
+└── main.tsx                      # Entrada da aplicação
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Como Começar
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Pré-requisitos
+- Node.js 16+ instalado
+- npm ou yarn como gerenciador de pacotes
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Instalação
+
+1. **Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/portifolio.git
+cd portifolio
+```
+
+2. **Instale as dependências**
+```bash
+npm install
+```
+
+3. **Inicie o servidor de desenvolvimento**
+```bash
+npm run dev
+```
+
+4. **Abra no navegador**
+```
+http://localhost:5173
+```
+
+## Scripts Disponíveis
+
+```bash
+# Inicia o servidor de desenvolvimento com HMR
+npm run dev
+
+# Compila TypeScript e constrói para produção
+npm run build
+
+# Visualiza a build de produção localmente
+npm run preview
+
+# Executa verificação de linting
+npm run lint
+```
+
+## Seções do Portfólio
+
+- **Hero**: Apresentação inicial com animação de entrada
+- **About**: Breve descrição sobre mim e minha missão
+- **Projects**: Showcase dos projetos desenvolvidos
+- **Experience**: Histórico profissional e experiências
+- **Education**: Formação educacional e cursos
+- **Skills**: Competências técnicas organizadas por categoria
+
+## Animações e Efeitos
+
+O projeto utiliza várias bibliotecas de animação:
+
+- **GSAP com ScrollTrigger**: Para animações sincronizadas com scroll
+- **Framer Motion**: Para transições suaves entre componentes
+- **CSS Animations**: Efeitos customizados com Tailwind CSS
+
+## Configuração do Build
+
+O projeto está configurado com:
+- **TypeScript strict mode** para melhor segurança de tipos
+- **ESLint** para manter a qualidade do código
+- **Vite** como bundler para máxima performance
+
+## Licença
+
+Este projeto está disponível sob a licença MIT - veja o arquivo LICENSE para detalhes.
+
+## Autor
+
+**Adryan** - Estudante de Engenharia de Software e Desenvolvedor Front-End
+
+- LinkedIn: https://www.linkedin.com/in/adryan-silva-garcia-2373573a8
+- Email: adryansilva3421@gmail.com
+
+---
+
+Desenvolvido usando React, TypeScript e Vite
 ```
