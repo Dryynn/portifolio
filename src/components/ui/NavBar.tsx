@@ -24,7 +24,7 @@ const NavBar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showNav, setShowNav] = useState(false);
   const isScrollingRef = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
