@@ -1,53 +1,68 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import { Home } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const sections = [
-  { id: 'home', label: 'Início' },
+  { id: 'home', label: <Home size={18} /> },
   { id: 'about', label: 'Sobre' },
+  { id: 'skills', label: 'Stack' },
   { id: 'projects', label: 'Projetos' },
   { id: 'experience', label: 'Trajetória' },
 ];
 
 const observerSections = [
   ...sections,
-  { id: 'skills', label: '' },
   { id: 'education', label: '' },
   { id: 'contact', label: '' }
 ];
 
 const NavBar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const isScrollingToContact = useRef(false);
+  const [showNav, setShowNav] = useState(false);
+  const isScrollingRef = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowNav(true);
+      } else {
+        setShowNav(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
-      rootMargin: '-15% 0px -15% 0px',
+      // Linha focal de 1% localizada a 30% do topo da tela. 
+      // Garante que apenas uma seção esteja ativa por vez.
+      rootMargin: '-30% 0px -69% 0px',
       threshold: 0
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      if (isScrollingToContact.current) return;
+      // Se o usuário clicou em um link, ignoramos o observer até o scroll terminar
+      if (isScrollingRef.current) return;
 
-      // Encontrar a seção que está mais visível ou a última que entrou
+      // Pega as seções que cruzaram a linha neste momento
       const intersectingEntries = entries.filter(e => e.isIntersecting);
 
       if (intersectingEntries.length > 0) {
-        // Pega a entrada que está mais próxima do topo do viewport
-        const bestEntry = intersectingEntries.reduce((prev, curr) => {
-          return curr.boundingClientRect.top < prev.boundingClientRect.top ? curr : prev;
-        });
+        // Se rolamos rápido, pega a última que entrou
+        const currentEntry = intersectingEntries[intersectingEntries.length - 1];
+        const currentId = currentEntry.target.id;
 
-        const id = bestEntry.target.id;
-        const isGhostSection = ['skills', 'education', 'contact'].includes(id);
-
-        if (isGhostSection) {
-          setActiveIndex(-1);
-        } else {
-          const index = sections.findIndex(s => s.id === id);
-          if (index !== -1) {
-            setActiveIndex(index);
-          }
-        }
+        // Se currentId não estiver no array (ex: education, contact), index será -1,
+        // o que esconde a pílula de forma elegante sem precisar de lógicas extras.
+        const index = sections.findIndex(s => s.id === currentId);
+        setActiveIndex(index);
       }
     };
 
@@ -62,30 +77,47 @@ const NavBar = () => {
   }, []);
 
   const scrollTo = (id: string, index: number) => {
-    isScrollingToContact.current = false; // Cancela bloqueio se clicar em outro
+    // Bloqueia atualizações do observer para evitar "pulos"
+    isScrollingRef.current = true;
     setActiveIndex(index);
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 1000); // 1 segundo é suficiente para a maioria dos scrolls suaves
+
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Usar GSAP para scroll garante que não haja conflitos com o Lenis ou outros eventos do navegador
+      gsap.to(window, {
+        scrollTo: { y: element, autoKill: false },
+        duration: 1.2,
+        ease: 'power3.inOut'
+      });
     }
   };
 
   const scrollToFooter = () => {
-    isScrollingToContact.current = true;
+    isScrollingRef.current = true;
     setActiveIndex(-1);
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 1000);
+
     const footer = document.getElementById('contact');
     if (footer) {
-      footer.scrollIntoView({ behavior: 'smooth' });
+      gsap.to(window, {
+        scrollTo: { y: footer, autoKill: false },
+        duration: 1.2,
+        ease: 'power3.inOut'
+      });
     }
-
-    // Tempo maior para o Lenis concluir o scroll longo
-    setTimeout(() => {
-      isScrollingToContact.current = false;
-    }, 2000);
   };
 
   return (
-    <StyledWrapper>
+    <StyledWrapper $visible={showNav}>
       <div className="fixed-nav-container">
         <div className="nav-pill">
           <div className="wrap">
@@ -115,13 +147,16 @@ const NavBar = () => {
   );
 }
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ $visible: boolean }>`
   .fixed-nav-container {
     position: fixed;
     bottom: 40px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(${props => props.$visible ? '0' : '150%'});
+    opacity: ${props => props.$visible ? '1' : '0'};
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     z-index: 100;
+    pointer-events: ${props => props.$visible ? 'auto' : 'none'};
   }
   
   .nav-pill {
@@ -213,14 +248,15 @@ const StyledWrapper = styled.div`
   @media (max-width: 600px) {
     .fixed-nav-container {
       bottom: 20px;
-      width: 95%;
+      width: auto;
+      max-width: 95vw;
       display: flex;
       justify-content: center;
     }
     .nav-pill {
       gap: 4px;
       padding: 4px;
-      width: 100%;
+      width: auto;
       justify-content: center;
     }
     .wrap {

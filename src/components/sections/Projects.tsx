@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -44,6 +44,14 @@ const Projects: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const bgGlowRef = useRef<HTMLDivElement>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const checkIsDesktop = () => setIsDesktop(window.innerWidth > 768)
+    checkIsDesktop()
+    window.addEventListener('resize', checkIsDesktop)
+    return () => window.removeEventListener('resize', checkIsDesktop)
+  }, [])
 
   useGSAP(() => {
     let mm = gsap.matchMedia()
@@ -132,7 +140,7 @@ const Projects: React.FC = () => {
             MEUS PROJETOS <br />
             
             <p className="scroll-hint" style={{ fontSize: '1rem', marginTop: '20px', fontWeight: 400, color: 'var(--text-muted)', letterSpacing: 'normal' }}>
-              {typeof window !== 'undefined' && window.innerWidth > 768 ? 'Scroll para explorar →' : 'Role para baixo ↓'}
+              {isDesktop ? 'Scroll para explorar →' : 'Role para baixo ↓'}
             </p>
           </h2>
         </div>

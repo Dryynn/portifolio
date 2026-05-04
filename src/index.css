@@ -17,14 +17,18 @@
   --background: #050505;
   --foreground: #ffffff;
   --primary: #ffffff;
-  --secondary: #a1a1aa; /* Zinc 400 */
-  --accent: #52525b; /* Zinc 600 */
+  --secondary: #a1a1aa;
+  /* Zinc 400 */
+  --accent: #52525b;
+  /* Zinc 600 */
   --text-muted: #a1a1aa;
   --card-bg: rgba(255, 255, 255, 0.02);
-  --border-color: rgba(255, 255, 255, 0.08); /* Cinza sutil */
+  --border-color: rgba(255, 255, 255, 0.08);
+  /* Cinza sutil */
 }
 
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -58,7 +62,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: 'Poppins', sans-serif;
   letter-spacing: -0.02em;
   color: var(--foreground);
@@ -73,7 +80,8 @@ section {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Importante para as seções não quebrarem o layout horizontal */
+  overflow: hidden;
+  /* Importante para as seções não quebrarem o layout horizontal */
 }
 
 .container {
